@@ -1,26 +1,17 @@
 package main
 
 import (
+	"Crawler/controllers"
 	"fmt"
-
-	"github.com/gocolly/colly/v2"
+	"os"
 )
 
 func main() {
 
-	c := colly.NewCollector(
-		colly.AllowedDomains("twitter.com"),
-	)
+	Twitter := os.Args[1]
+	if Twitter == "" {
+		fmt.Println("Please set a the Twitter id. Twitter id can be foudn at the end of the url like : twitter.com/(id)")
+	}
+	controllers.Crawler(Twitter)
 
-	c.OnHTML("div", func(e *colly.HTMLElement) {
-		tweet := e.ChildAttr("article", "role")
-
-		fmt.Printf("tweet found: %q -> %s\n", e.Text, tweet)
-	})
-
-	c.OnRequest(func(r *colly.Request) {
-		fmt.Println("Visiting", r.URL.String())
-	})
-
-	c.Visit("https://twitter.com/realdonaldtrump")
 }
